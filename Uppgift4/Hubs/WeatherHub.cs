@@ -25,10 +25,11 @@ namespace Uppgift4.Server.Hubs
         }
 
         public async Task CurrentWeather(string encryptedWeather)
+        
         {
             try
             {
-                await Task.Delay(500);
+                await Task.Delay(5000);
 
                 var test = _dpProvider.CreateProtector("Weather.Purpose");
 
@@ -36,7 +37,7 @@ namespace Uppgift4.Server.Hubs
 
                 var deserializedWeather = JsonSerializer.Deserialize<WeatherData>(decrypted);
 
-                _logger.LogInformation($"New Weather data acquired! : {deserializedWeather} \n Sending To subscribers..");
+                _logger.LogInformation($"New Weather data acquired! : \r\n{deserializedWeather.City} \r\n {deserializedWeather.Temp} \r\n {deserializedWeather.Date} \n Sending To subscribers..");
 
                 var serializedWeather = JsonSerializer.Serialize(deserializedWeather);
 

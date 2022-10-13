@@ -21,29 +21,35 @@ var connection = new HubConnectionBuilder()
     .WithAutomaticReconnect()
     .Build();
 
-Console.WriteLine("Waiting..");
+Console.WriteLine("IoT Sim Waiting.. (Press Enter)");
 Console.ReadLine();
+Console.Clear();
 
 await connection.StartAsync();
 
+Console.WriteLine("Simulated IoT Connected!");
 
-var weather = new WeatherData()
+while (true)
 {
-    City = RandomCity(),
-    Temp = RandomTemp(),
-    Date = DateTime.Now.Hour.ToString(),
-};
+    var weather = new WeatherData()
+    {
+        City = RandomCity(),
+        Temp = RandomTemp(),
+        Date = DateTime.Now.ToString(),
+    };
 
-var serialized = JsonSerializer.Serialize(weather);
+    var serialized = JsonSerializer.Serialize(weather);
 
-var encrypted = protector.Protect(serialized);
+    var encrypted = protector.Protect(serialized);
 
-await connection.SendAsync("CurrentWeather", encrypted, CancellationToken.None);
+    await connection.SendAsync("CurrentWeather", encrypted, CancellationToken.None);
+}
+
 
 
 string RandomCity()
 {
-    int pick = new Random().Next(0, 2);
+    int pick = new Random().Next(0, 3);
 
     if (pick == 0)
         return "Stockholm";
@@ -55,8 +61,8 @@ string RandomCity()
 
 string RandomTemp()
 {
-    int pick = new Random().Next(-100, 100);
+    int pick = new Random().Next(-30, 31);
 
-    return pick + "Celcius";
+    return pick + " °C";
 }
 

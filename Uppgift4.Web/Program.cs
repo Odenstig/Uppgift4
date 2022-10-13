@@ -20,14 +20,6 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseCors(builder =>
-{
-    builder.WithOrigins("https://localhost:7123")
-    .AllowAnyHeader()
-    .WithMethods("GET", "POST")
-    .AllowCredentials();
-});
-
 app.UseAuthorization();
 
 app.MapRazorPages();
